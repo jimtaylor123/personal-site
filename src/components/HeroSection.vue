@@ -1,8 +1,14 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useTheme } from '../composables/useTheme'
 
+const { theme } = useTheme()
 const canvasRef = ref(null)
 let animId = null
+
+const heroImage = computed(() =>
+  theme.value === 'dark' ? '/images/not-smiling.webp' : '/images/smiling.webp'
+)
 
 const vertexSrc = `attribute vec2 aPosition;
 void main() {
@@ -12,8 +18,8 @@ void main() {
 const fragmentSrc = `precision highp float;
 uniform vec2 uResolution;
 uniform float uTime;
+uniform float uIsLight;
 
-// simple pseudo-random hash
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
 }
@@ -37,9 +43,17 @@ void main() {
 
   float t = uTime * 0.06;
 
-  vec3 dark = vec3(0.015, 0.015, 0.025);
-  vec3 mid  = vec3(0.03, 0.025, 0.05);
-  vec3 acc  = vec3(0.045, 0.035, 0.08);
+  vec3 dDark = vec3(0.015, 0.015, 0.025);
+  vec3 dMid  = vec3(0.03, 0.025, 0.05);
+  vec3 dAcc  = vec3(0.045, 0.035, 0.08);
+
+  vec3 lDark = vec3(0.96, 0.94, 0.90);
+  vec3 lMid  = vec3(0.90, 0.88, 0.84);
+  vec3 lAcc  = vec3(0.84, 0.80, 0.75);
+
+  vec3 dark  = mix(dDark, lDark, uIsLight);
+  vec3 mid   = mix(dMid,  lMid,  uIsLight);
+  vec3 acc   = mix(dAcc,  lAcc,  uIsLight);
 
   float n1 = noise(p * 1.8 + t * 0.5);
   float n2 = noise(p * 2.5 - t * 0.3 + 10.0);
@@ -93,8 +107,9 @@ function initGL(canvas) {
 
   const uRes = gl.getUniformLocation(prog, 'uResolution')
   const uTime = gl.getUniformLocation(prog, 'uTime')
+  const uIsLight = gl.getUniformLocation(prog, 'uIsLight')
 
-  return { gl, prog, uRes, uTime }
+  return { gl, prog, uRes, uTime, uIsLight }
 }
 
 onMounted(() => {
@@ -104,7 +119,7 @@ onMounted(() => {
   const ctx = initGL(canvas)
   if (!ctx) return
 
-  const { gl, uRes, uTime } = ctx
+  const { gl, uRes, uTime, uIsLight } = ctx
 
   function resize() {
     const dpr = window.devicePixelRatio || 1
@@ -125,6 +140,7 @@ onMounted(() => {
 
   function frame() {
     gl.uniform1f(uTime, (performance.now() - start) / 1000)
+    gl.uniform1f(uIsLight, theme.value === 'light' ? 1.0 : 0.0)
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
     animId = requestAnimationFrame(frame)
   }
@@ -139,9 +155,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="hero">
+  <section class="hero" :class="theme">
     <canvas ref="canvasRef" class="hero-canvas" />
     <div class="hero-overlay">
+      <img :src="heroImage" alt="Jim Taylor" class="hero-portrait" />
       <h1 class="hero-title">Jim Taylor</h1>
       <p class="hero-subtitle">Full Stack Developer / Cybersecurity</p>
       <div class="hero-cta">
@@ -182,25 +199,61 @@ onMounted(() => {
   padding: 2rem;
 }
 
+.hero-portrait {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 1.5rem;
+  border: 2px solid rgba(245, 158, 76, 0.3);
+  box-shadow: 0 0 40px rgba(245, 158, 76, 0.15);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+@media (min-width: 768px) {
+  .hero-portrait {
+    width: 160px;
+    height: 160px;
+  }
+}
+
 .hero-title {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: clamp(3rem, 8vw, 7rem);
   letter-spacing: -0.04em;
   line-height: 1;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+
+.hero.dark .hero-title {
   color: #fff;
   text-shadow: 0 0 60px rgba(245, 158, 76, 0.1);
-  margin-bottom: 0.5rem;
+}
+
+.hero.light .hero-title {
+  color: #1a1a2e;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
 }
 
 .hero-subtitle {
   font-family: var(--font-body);
   font-size: clamp(1rem, 2vw, 1.35rem);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 2.5rem;
+  transition: color 0.3s;
+}
+
+.hero.dark .hero-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hero.light .hero-subtitle {
+  color: rgba(26, 26, 46, 0.5);
 }
 
 .hero-cta {
@@ -231,13 +284,24 @@ onMounted(() => {
   color: var(--color-accent);
 }
 
-.btn-outline {
+.hero.dark .btn-outline {
   background: transparent;
   color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.btn-outline:hover {
+.hero.dark .btn-outline:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.hero.light .btn-outline {
+  background: transparent;
+  color: rgba(26, 26, 46, 0.7);
+  border: 1px solid rgba(26, 26, 46, 0.2);
+}
+
+.hero.light .btn-outline:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
@@ -254,17 +318,32 @@ onMounted(() => {
   z-index: 1;
 }
 
+.hero.dark .scroll-text {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hero.light .scroll-text {
+  color: rgba(26, 26, 46, 0.25);
+}
+
+.hero.dark .scroll-line {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), transparent);
+}
+
+.hero.light .scroll-line {
+  background: linear-gradient(to bottom, rgba(26, 26, 46, 0.25), transparent);
+}
+
 .scroll-text {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.35);
+  transition: color 0.3s;
 }
 
 .scroll-line {
   width: 1px;
   height: 40px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), transparent);
   animation: scrollPulse 2s ease-in-out infinite;
 }
 

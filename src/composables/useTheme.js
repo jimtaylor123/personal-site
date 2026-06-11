@@ -6,7 +6,7 @@ const preferredDark = window.matchMedia('(prefers-color-scheme: dark)')
 
 function resolveTheme(saved) {
   if (saved) return saved
-  return preferredDark.matches ? 'dark' : 'light'
+  return 'dark'
 }
 
 const theme = ref(resolveTheme(localStorage.getItem(STORAGE_KEY)))
@@ -26,7 +26,7 @@ export function useTheme() {
   onMounted(() => {
     const handler = () => {
       if (!localStorage.getItem(STORAGE_KEY)) {
-        theme.value = preferredDark.matches ? 'dark' : 'light'
+        theme.value = 'dark'
       }
     }
     preferredDark.addEventListener('change', handler)

@@ -38,60 +38,82 @@ const { theme, toggle } = useTheme()
   left: 0;
   right: 0;
   height: var(--nav-height);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   padding: 0 2rem;
-  background: rgba(8, 8, 15, 0.65);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
   z-index: 100;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .logo {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.15rem;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  color: var(--nav-text);
   letter-spacing: -0.02em;
+  justify-self: start;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+
+@media (min-width: 480px) {
+  .logo {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo {
+    font-size: 1.15rem;
+  }
 }
 
 .logo:hover {
-  color: #f59e4c;
+  color: var(--color-accent);
 }
 
 .nav {
   display: flex;
-  gap: 1.75rem;
+  gap: 1rem;
+  justify-self: center;
+}
+
+@media (min-width: 480px) {
+  .nav {
+    gap: 1.75rem;
+  }
 }
 
 .nav a {
   font-size: 0.875rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--nav-text-muted);
   transition: color 0.2s;
 }
 
 .nav a:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--nav-text);
 }
 
 .theme-toggle {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--nav-toggle-bg);
+  border: 1px solid var(--nav-toggle-border);
   border-radius: 8px;
   padding: 0.4rem;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--nav-text-muted);
   display: flex;
   align-items: center;
+  justify-self: end;
   transition: color 0.2s, border-color 0.2s, background-color 0.2s;
 }
 
 .theme-toggle:hover {
-  color: #f59e4c;
-  border-color: #f59e4c;
-  background: rgba(245, 158, 76, 0.1);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-glow);
 }
 </style>

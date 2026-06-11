@@ -1,7 +1,36 @@
 <script setup>
+import { ref } from 'vue'
+
+const reversedEmail = 'ecaps.rolyatmij@mij'
+const reversedTel = '58948430970'
+const emailCopied = ref(false)
+
+function getEmail() {
+  return [...reversedEmail].reverse().join('')
+}
+
+function getTel() {
+  return [...reversedTel].reverse().join('')
+}
+
+function copyEmail() {
+  navigator.clipboard.writeText(getEmail())
+  emailCopied.value = true
+  setTimeout(() => { emailCopied.value = false }, 2000)
+}
+
+function openTel() {
+  const a = document.createElement('a')
+  a.href = `tel:${getTel()}`
+  a.style.display = 'none'
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+}
+
 const social = [
-  { label: 'GitHub', url: 'https://github.com/jimtaylor' },
-  { label: 'LinkedIn', url: 'https://linkedin.com/in/jimtaylor' },
+  { label: 'GitHub', url: 'https://github.com/jimtaylor123' },
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/in/jamesedwardtaylor/' },
 ]
 
 const community = [
@@ -17,6 +46,18 @@ const community = [
         <div class="link-group">
           <h3 class="link-group-title">Professional</h3>
           <ul class="link-list">
+            <li>
+              <button class="link-item" :class="{ copied: emailCopied }" @click="copyEmail">
+                <span class="link-label">{{ emailCopied ? 'Copied!' : 'Email' }}</span>
+                <span class="link-arrow">{{ emailCopied ? '✓' : '→' }}</span>
+              </button>
+            </li>
+            <li>
+              <button class="link-item" @click="openTel">
+                <span class="link-label">Phone</span>
+                <span class="link-arrow">&rarr;</span>
+              </button>
+            </li>
             <li v-for="l in social" :key="l.label">
               <a :href="l.url" target="_blank" rel="noopener" class="link-item">
                 <span class="link-label">{{ l.label }}</span>
@@ -90,14 +131,25 @@ const community = [
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   border: 1px solid var(--color-border);
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
   color: var(--color-text);
+  cursor: pointer;
+  text-decoration: none;
   transition: border-color 0.2s, background-color 0.2s;
 }
 
 .link-item:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-glow);
+}
+
+.link-item.copied {
   border-color: var(--color-accent);
   background: var(--color-accent-glow);
 }
