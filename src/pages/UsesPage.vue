@@ -37,6 +37,7 @@ const categories = [
       { label: 'Docker', desc: 'Local dev, CI, deployment' },
       { label: 'DigitalOcean', desc: 'Primary cloud provider' },
       { label: 'Cloudflare', desc: 'DNS, WAF, CDN' },
+      { label: 'Netlify', desc: 'Static hosting, deploy from git' },
     ],
   },
   {
