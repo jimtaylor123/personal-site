@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 import { useTheme } from '../composables/useTheme'
 
 const { theme, toggle } = useTheme()
@@ -6,11 +7,13 @@ const { theme, toggle } = useTheme()
 
 <template>
   <header class="site-header">
-    <a href="#" class="logo">Jim Taylor</a>
+    <RouterLink to="/" class="logo">Jim Taylor</RouterLink>
     <nav class="nav">
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#links">Links</a>
+      <RouterLink to="/#about">About</RouterLink>
+      <RouterLink to="/#projects">Projects</RouterLink>
+      <RouterLink to="/#links">Links</RouterLink>
+      <RouterLink to="/uses">Uses</RouterLink>
+      <RouterLink to="/personal">Personal</RouterLink>
     </nav>
     <button class="theme-toggle" @click="toggle" :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`">
       <svg v-if="theme === 'dark'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

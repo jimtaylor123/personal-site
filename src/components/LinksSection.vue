@@ -32,10 +32,6 @@ const social = [
   { label: 'GitHub', url: 'https://github.com/jimtaylor123' },
   { label: 'LinkedIn', url: 'https://www.linkedin.com/in/jamesedwardtaylor/' },
 ]
-
-const community = [
-  { label: 'My Church', url: 'https://church.jimtaylor.space' },
-]
 </script>
 
 <template>
@@ -44,7 +40,7 @@ const community = [
       <h2 class="section-label">Links</h2>
       <div class="link-groups">
         <div class="link-group">
-          <h3 class="link-group-title">Professional</h3>
+          <h3 class="link-group-title">Contact</h3>
           <ul class="link-list">
             <li>
               <button class="link-item" :class="{ copied: emailCopied }" @click="copyEmail">
@@ -58,18 +54,12 @@ const community = [
                 <span class="link-arrow">&rarr;</span>
               </button>
             </li>
-            <li v-for="l in social" :key="l.label">
-              <a :href="l.url" target="_blank" rel="noopener" class="link-item">
-                <span class="link-label">{{ l.label }}</span>
-                <span class="link-arrow">&rarr;</span>
-              </a>
-            </li>
           </ul>
         </div>
         <div class="link-group">
-          <h3 class="link-group-title">Community</h3>
+          <h3 class="link-group-title">Professional</h3>
           <ul class="link-list">
-            <li v-for="l in community" :key="l.label">
+            <li v-for="l in social" :key="l.label">
               <a :href="l.url" target="_blank" rel="noopener" class="link-item">
                 <span class="link-label">{{ l.label }}</span>
                 <span class="link-arrow">&rarr;</span>

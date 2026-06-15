@@ -1,6 +1,7 @@
 <script setup>
 const tech = [
   'PHP / Laravel',
+  'React',
   'Vue / Nuxt',
   'JavaScript / TypeScript',
   'Python',
