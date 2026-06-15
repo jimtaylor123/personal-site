@@ -4,16 +4,17 @@ const categories = [
     title: 'Editor & Terminal',
     items: [
       { label: 'VS Code', desc: 'Primary editor — One Dark Pro theme' },
-      { label: 'PHPStorm', desc: 'When the project demands it' },
-      { label: 'iTerm2', desc: 'With fish shell + starship prompt' },
-      { label: 'Warp', desc: 'Modern terminal when I want speed' },
+      { label: 'Codex', desc: 'AI-assisted coding in the terminal' },
+      { label: 'Vim', desc: 'Quick edits and config files' },
+      { label: 'Zsh', desc: 'Default shell in VS Code — aliases and git shortcuts' },
     ],
   },
   {
     title: 'Frontend',
     items: [
       { label: 'Vue 3', desc: 'Composition API, Vite, Pinia' },
-      { label: 'Nuxt', desc: 'SSR when the project needs SEO' },
+      { label: 'Vuetify', desc: 'Material component library for Vue' },
+      { label: 'shadcn/vue', desc: 'Component primitives, copy-paste style' },
       { label: 'Tailwind CSS', desc: 'Rapid prototyping' },
       { label: 'Playwright', desc: 'E2E tests that don\'t flake' },
     ],
@@ -22,8 +23,9 @@ const categories = [
     title: 'Backend',
     items: [
       { label: 'Laravel', desc: 'Daily driver — APIs, queues, auth' },
-      { label: 'PHP 8.3', desc: 'With strict types everywhere' },
+      { label: 'PHP 8.4', desc: 'With strict types everywhere' },
       { label: 'MySQL / PostgreSQL', desc: 'Relational, always' },
+      { label: 'SQLite', desc: 'Lightweight dev and testing' },
       { label: 'Redis', desc: 'Caching, sessions, queues' },
     ],
   },
@@ -38,12 +40,29 @@ const categories = [
     ],
   },
   {
+    title: 'AI Tools',
+    items: [
+      { label: 'Opencode', desc: 'Primary AI harness — terminal-native, agent-driven' },
+      { label: 'Big Pickle', desc: 'Default model — strong reasoning, no fluff' },
+      { label: 'SuperWhisper', desc: 'AI voice transcription for notes and dictation' },
+    ],
+  },
+  {
+    title: 'Refreshments',
+    items: [
+      { label: 'French Press', desc: 'Morning ritual, never instant' },
+      { label: 'Brazilian Coffee', desc: 'Single origin, medium roast' },
+      { label: 'Pain au Chocolat', desc: 'The reason I go to the bakery' },
+    ],
+  },
+  {
     title: 'Hardware',
     items: [
       { label: 'MacBook Pro M3', desc: '16", 36GB RAM — daily driver' },
       { label: 'LG 27" 4K', desc: 'Main monitor' },
-      { label: 'Keychron Q1', desc: 'Custom mechanical — Gateron Browns' },
+      { label: 'Apple Magic Keyboard', desc: 'Low profile, reliable' },
       { label: 'Logitech MX Master 3S', desc: 'Ergo, silent clicks' },
+      { label: 'YoYo Standing Desk', desc: 'Standing desk for focus sessions' },
     ],
   },
 ]
@@ -54,6 +73,7 @@ const categories = [
     <section class="uses-hero">
       <h1 class="uses-title">/uses</h1>
       <p class="uses-subtitle">The tools and gear I use daily.</p>
+      <p class="uses-quote">"Less, but better." — Dieter Rams</p>
     </section>
     <section class="uses-content section">
       <div class="section-inner">
@@ -98,6 +118,14 @@ const categories = [
 .uses-subtitle {
   font-size: 1.05rem;
   color: var(--color-text-muted);
+}
+
+.uses-quote {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  opacity: 0.7;
 }
 
 .section {
