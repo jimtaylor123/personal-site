@@ -1,19 +1,19 @@
 <script setup>
 const projects = [
   {
-    title: 'Project One',
-    description: 'A Laravel + Vue application for managing —',
-    url: 'https://app.jimtaylor.space',
+    title: 'Possible Words',
+    description: 'Generates and catalogues pronounceable words that aren\'t in the English dictionary yet. Users can suggest definitions and vote — like claiming uncharted linguistic territory.',
+    url: 'https://possiblewords.jimtaylor.space',
   },
   {
-    title: 'Project Two',
-    description: 'Security tooling and research —',
-    url: 'https://sec.jimtaylor.space',
+    title: 'Slow Carb Randomizer',
+    description: 'A mobile app that generates random food combinations following the slow carb diet popularised by Tim Ferriss. No thinking, just eating.',
+    url: 'https://slowcarbrandomizer.jimtaylor.space',
   },
   {
-    title: 'Project Three',
-    description: 'Open source package for —',
-    url: 'https://oss.jimtaylor.space',
+    title: 'REGGULAR',
+    description: 'A SaaS app for running an egg delivery business — customer ordering, admin dashboards, route planning, and subscription management all in one place.',
+    url: 'https://reggular.jimtaylor.space',
   },
 ]
 </script>
@@ -24,7 +24,12 @@ const projects = [
       <h2 class="section-label">Projects</h2>
       <div class="project-grid">
         <article v-for="p in projects" :key="p.title" class="project-card">
-          <h3 class="project-title">{{ p.title }}</h3>
+          <h3 class="project-title">
+            <span v-if="p.title === 'Possible Words'" aria-hidden="true">🔤</span>
+            <span v-else-if="p.title === 'Slow Carb Randomizer'" aria-hidden="true">🥗</span>
+            <span v-else-if="p.title === 'REGGULAR'" aria-hidden="true">🥚</span>
+            {{ p.title }}
+          </h3>
           <p class="project-desc">{{ p.description }}</p>
           <a :href="p.url" class="project-link" target="_blank" rel="noopener">
             Visit <span aria-hidden="true">&rarr;</span>

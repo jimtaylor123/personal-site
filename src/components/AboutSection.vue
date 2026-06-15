@@ -1,15 +1,37 @@
 <script setup>
+import { ref, computed } from 'vue'
+
 const tech = [
-  'PHP / Laravel',
-  'React',
-  'Vue / Nuxt',
-  'JavaScript / TypeScript',
-  'Python',
-  'Linux / Docker',
-  'Penetration Testing',
-  'Cloud (AWS / DigitalOcean)',
-  'Security Hardening',
+  { label: 'PHP / Laravel', category: 'earning' },
+  { label: 'React', category: 'earning' },
+  { label: 'Vue / Nuxt', category: 'earning' },
+  { label: 'JavaScript / TypeScript', category: 'earning' },
+  { label: 'Python', category: 'learning' },
+  { label: 'Linux / Docker', category: 'earning' },
+  { label: 'Penetration Testing', category: 'learning' },
+  { label: 'Cloud (AWS / DigitalOcean)', category: 'earning' },
+  { label: 'Codex', category: 'earning' },
+  { label: 'Figma', category: 'earning' },
+  { label: 'Jira', category: 'earning' },
+  { label: 'PKI', category: 'earning' },
+  { label: 'Business Analysis', category: 'earning' },
+  { label: 'Playwright', category: 'earning' },
+  { label: 'Behaviour Driven Development', category: 'earning' },
+  { label: 'Security Hardening', category: 'learning' },
+  { label: 'Claude', category: 'learning' },
+  { label: 'Opencode', category: 'learning' },
 ]
+
+const filter = ref(null)
+
+const filtered = computed(() => {
+  if (!filter.value) return tech
+  return tech.filter(t => t.category === filter.value)
+})
+
+function setFilter(cat) {
+  filter.value = filter.value === cat ? null : cat
+}
 </script>
 
 <template>
@@ -28,8 +50,29 @@ const tech = [
           resilient — code that holds up under scrutiny.
         </p>
       </div>
+      <div class="tech-filter">
+        <button
+          class="filter-btn earning"
+          :class="{ active: filter === 'earning' }"
+          @click="setFilter('earning')"
+        >
+          💼 Earning
+        </button>
+        <button
+          class="filter-btn learning"
+          :class="{ active: filter === 'learning' }"
+          @click="setFilter('learning')"
+        >
+          📖 Learning
+        </button>
+      </div>
       <ul class="tech-list">
-        <li v-for="t in tech" :key="t" class="tech-item">{{ t }}</li>
+        <li
+          v-for="t in filtered"
+          :key="t.label"
+          class="tech-item"
+          :class="t.category"
+        >{{ t.label }}</li>
       </ul>
     </div>
   </section>
@@ -71,6 +114,55 @@ const tech = [
   max-width: 580px;
 }
 
+.tech-filter {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-btn {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.filter-btn.earning {
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.filter-btn.earning:hover {
+  border-color: #65a30d;
+  color: #65a30d;
+}
+
+.filter-btn.earning.active {
+  background: rgba(101, 163, 13, 0.15);
+  border-color: #65a30d;
+  color: #65a30d;
+}
+
+.filter-btn.learning {
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.filter-btn.learning:hover {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+}
+
+.filter-btn.learning.active {
+  background: rgba(14, 165, 233, 0.15);
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+}
+
 .tech-list {
   display: flex;
   flex-wrap: wrap;
@@ -84,12 +176,26 @@ const tech = [
   border-radius: 100px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
   transition: border-color 0.2s, color 0.2s;
 }
 
-.tech-item:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+.tech-item.earning {
+  color: #65a30d;
+  border-color: rgba(101, 163, 13, 0.3);
+}
+
+.tech-item.earning:hover {
+  border-color: #65a30d;
+  background: rgba(101, 163, 13, 0.1);
+}
+
+.tech-item.learning {
+  color: #0ea5e9;
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.tech-item.learning:hover {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.1);
 }
 </style>
