@@ -44,11 +44,18 @@ const { theme, toggle } = useTheme()
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 1rem;
+  gap: 0.5rem;
   background: var(--nav-bg);
   border-bottom: 1px solid var(--nav-border);
   z-index: 100;
   transition: background-color 0.3s, border-color 0.3s;
+}
+
+@media (min-width: 768px) {
+  .site-header {
+    padding: 0 2rem;
+  }
 }
 
 .logo {
@@ -80,21 +87,41 @@ const { theme, toggle } = useTheme()
 
 .nav {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   justify-self: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 480px) {
+  .nav {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
   .nav {
     gap: 1.75rem;
   }
 }
 
 .nav a {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 500;
+  white-space: nowrap;
   color: var(--nav-text-muted);
   transition: color 0.2s;
+}
+
+@media (min-width: 480px) {
+  .nav a {
+    font-size: 0.875rem;
+  }
 }
 
 .nav a:hover {

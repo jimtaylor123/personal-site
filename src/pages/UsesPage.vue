@@ -1,4 +1,6 @@
 <script setup>
+import SiteFooter from '../components/SiteFooter.vue'
+
 const categories = [
   {
     title: 'Editor & Terminal',

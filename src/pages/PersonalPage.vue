@@ -129,6 +129,13 @@ watch(theme, () => {
               <span class="hobby-desc">The Lake District, the Dales, and Pendle Hill on a Sunday</span>
             </div>
           </li>
+          <li class="hobby-item">
+            <span class="hobby-emoji" aria-hidden="true">🌆</span>
+            <div>
+              <span class="hobby-name">Manchester</span>
+              <span class="hobby-desc">Great music, great food, great vibe</span>
+            </div>
+          </li>
         </ul>
       </div>
     </section>
