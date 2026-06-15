@@ -137,7 +137,7 @@ watch(theme, () => {
       <div class="section-inner">
         <h2 class="section-label">Church</h2>
         <p class="personal-text">
-          Faith matters. I'm part of a church community in Clitheroe —
+          Faith matters. I'm part of a church community near Clitheroe —
           <a href="https://www.holdenchapel.org.uk/" target="_blank" rel="noopener">find out more here</a>.
         </p>
       </div>
