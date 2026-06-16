@@ -4,16 +4,19 @@ const projects = [
     title: 'Possible Words',
     description: 'Generates and catalogues pronounceable words that aren\'t in the English dictionary yet. Users can suggest definitions and vote — like claiming uncharted linguistic territory.',
     url: 'https://possiblewords.jimtaylor.space',
+    emoji: '🔤',
   },
   {
     title: 'Slow Carb Randomizer',
     description: 'A mobile app that generates random food combinations following the slow carb diet popularised by Tim Ferriss. No thinking, just eating.',
     url: 'https://slowcarbrandomizer.jimtaylor.space',
+    emoji: '🥗',
   },
   {
     title: 'REGGULAR',
     description: 'A SaaS app for running an egg delivery business — customer ordering, admin dashboards, route planning, and subscription management all in one place.',
     url: 'https://reggular.jimtaylor.space',
+    emoji: '🥚',
   },
 ]
 </script>
@@ -25,9 +28,7 @@ const projects = [
       <div class="project-grid">
         <article v-for="p in projects" :key="p.title" class="project-card">
           <h3 class="project-title">
-            <span v-if="p.title === 'Possible Words'" aria-hidden="true">🔤</span>
-            <span v-else-if="p.title === 'Slow Carb Randomizer'" aria-hidden="true">🥗</span>
-            <span v-else-if="p.title === 'REGGULAR'" aria-hidden="true">🥚</span>
+            <span aria-hidden="true">{{ p.emoji }}</span>
             {{ p.title }}
           </h3>
           <p class="project-desc">{{ p.description }}</p>

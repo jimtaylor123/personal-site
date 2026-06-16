@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jim Taylor — Full Stack Developer / Cybersecurity</title>
     <meta name="description" content="Jim Taylor is a full stack developer focusing on Laravel, Vue, and cybersecurity." />
+    <script>
+      (function() {
+        var theme = localStorage.getItem('jimtaylor-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -40,7 +40,7 @@ test.describe('Home page', () => {
 
     const allCount = await techItems.count()
 
-    await page.getByRole('button', { name: '💼 Earning' }).click()
+    await page.getByRole('button', { name: /Earning/ }).click()
     const earningCount = await techItems.count()
     expect(earningCount).toBeLessThan(allCount)
 

@@ -56,14 +56,14 @@ function setFilter(cat) {
           :class="{ active: filter === 'earning' }"
           @click="setFilter('earning')"
         >
-          💼 Earning
+          <span aria-hidden="true">💼</span> Earning
         </button>
         <button
           class="filter-btn learning"
           :class="{ active: filter === 'learning' }"
           @click="setFilter('learning')"
         >
-          📖 Learning
+          <span aria-hidden="true">📖</span> Learning
         </button>
       </div>
       <ul class="tech-list">

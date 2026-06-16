@@ -1,17 +1,16 @@
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const STORAGE_KEY = 'jimtaylor-theme'
 
-const preferredDark = window.matchMedia('(prefers-color-scheme: dark)')
-
-function resolveTheme(saved) {
-  if (saved) return saved
-  return 'dark'
+function getInitialTheme() {
+  if (typeof window === 'undefined') return 'dark'
+  return localStorage.getItem(STORAGE_KEY) || 'dark'
 }
 
-const theme = ref(resolveTheme(localStorage.getItem(STORAGE_KEY)))
+const theme = ref(getInitialTheme())
 
 function apply(t) {
+  if (typeof window === 'undefined') return
   document.documentElement.setAttribute('data-theme', t)
   localStorage.setItem(STORAGE_KEY, t)
 }
@@ -22,15 +21,6 @@ export function useTheme() {
   function toggle() {
     theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
-
-  onMounted(() => {
-    const handler = () => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        theme.value = 'dark'
-      }
-    }
-    preferredDark.addEventListener('change', handler)
-  })
 
   return { theme, toggle }
 }
