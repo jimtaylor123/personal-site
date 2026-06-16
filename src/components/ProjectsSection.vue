@@ -5,18 +5,21 @@ const projects = [
     description: 'Generates and catalogues pronounceable words that aren\'t in the English dictionary yet. Users can suggest definitions and vote — like claiming uncharted linguistic territory.',
     url: 'https://possiblewords.jimtaylor.space',
     emoji: '🔤',
+    status: 'Coming Soon',
   },
   {
     title: 'Slow Carb Randomizer',
     description: 'A mobile app that generates random food combinations following the slow carb diet popularised by Tim Ferriss. No thinking, just eating.',
     url: 'https://slowcarbrandomizer.jimtaylor.space',
     emoji: '🥗',
+    status: 'Coming Soon',
   },
   {
     title: 'REGGULAR',
     description: 'A SaaS app for running an egg delivery business — customer ordering, admin dashboards, route planning, and subscription management all in one place.',
     url: 'https://reggular.jimtaylor.space',
     emoji: '🥚',
+    status: 'Coming Soon',
   },
 ]
 </script>
@@ -30,9 +33,13 @@ const projects = [
           <h3 class="project-title">
             <span aria-hidden="true">{{ p.emoji }}</span>
             {{ p.title }}
+            <span v-if="p.status" class="status-badge">{{ p.status }}</span>
           </h3>
           <p class="project-desc">{{ p.description }}</p>
-          <a :href="p.url" class="project-link" target="_blank" rel="noopener">
+          <span v-if="p.status" class="project-link project-link--disabled">
+            Visit <span aria-hidden="true">&rarr;</span>
+          </span>
+          <a v-else :href="p.url" class="project-link" target="_blank" rel="noopener">
             Visit <span aria-hidden="true">&rarr;</span>
           </a>
         </article>
@@ -82,6 +89,21 @@ const projects = [
   box-shadow: 0 0 0 1px var(--color-accent-glow);
 }
 
+.status-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  vertical-align: middle;
+  margin-left: 0.5rem;
+}
+
 .project-title {
   font-family: var(--font-heading);
   font-weight: 700;
@@ -104,5 +126,11 @@ const projects = [
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+}
+
+.project-link--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  user-select: none;
 }
 </style>
