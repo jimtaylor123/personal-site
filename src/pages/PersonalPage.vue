@@ -161,8 +161,10 @@ watch(theme, () => {
       <div class="section-inner">
         <h2 class="section-label">Church</h2>
         <p class="personal-text">
-          Faith matters. I'm part of a church community near Clitheroe —
+          I'm a committed Christian — I believe Jesus is returning soon, and pray and read the bible daily. I am part of the congregation at Holden Chapel
           <a href="https://www.holdenchapel.org.uk/" target="_blank" rel="noopener">find out more here</a>.
+          <br><br>
+          I did a Theology degree at Oxford University to try and test and develop my faith. I remained convinced that the Bible is the word of God.
         </p>
       </div>
     </section>

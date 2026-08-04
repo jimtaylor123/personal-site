@@ -1,162 +1,15 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { computed } from 'vue'
 import { useTheme } from '../composables/useTheme'
 
 const { theme } = useTheme()
-const canvasRef = ref(null)
-let animId = null
-
 const heroImage = computed(() =>
   theme.value === 'dark' ? '/images/not-smiling.webp' : '/images/smiling.webp'
 )
-
-const vertexSrc = `attribute vec2 aPosition;
-void main() {
-  gl_Position = vec4(aPosition, 0.0, 1.0);
-}`
-
-const fragmentSrc = `precision highp float;
-uniform vec2 uResolution;
-uniform float uTime;
-uniform float uIsLight;
-
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
-}
-
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  f = f * f * (3.0 - 2.0 * f);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
-  return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-}
-
-void main() {
-  vec2 uv = gl_FragCoord.xy / uResolution;
-  float aspect = uResolution.x / uResolution.y;
-  vec2 p = uv * 2.0 - 1.0;
-  p.x *= aspect;
-
-  float t = uTime * 0.06;
-
-  vec3 dDark = vec3(0.015, 0.015, 0.025);
-  vec3 dMid  = vec3(0.03, 0.025, 0.05);
-  vec3 dAcc  = vec3(0.045, 0.035, 0.08);
-
-  vec3 lDark = vec3(0.96, 0.94, 0.90);
-  vec3 lMid  = vec3(0.90, 0.88, 0.84);
-  vec3 lAcc  = vec3(0.84, 0.80, 0.75);
-
-  vec3 dark  = mix(dDark, lDark, uIsLight);
-  vec3 mid   = mix(dMid,  lMid,  uIsLight);
-  vec3 acc   = mix(dAcc,  lAcc,  uIsLight);
-
-  float n1 = noise(p * 1.8 + t * 0.5);
-  float n2 = noise(p * 2.5 - t * 0.3 + 10.0);
-  float n3 = noise(p * 3.2 + t * 0.7 + 20.0);
-
-  float blend = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
-  vec3 col = mix(dark, mid, blend);
-  col = mix(col, acc, smoothstep(0.4, 0.8, n2));
-
-  float vig = 1.0 - length(p) * 0.6;
-  col *= vig;
-
-  float glow = exp(-length(p) * 2.5) * 0.15;
-  col += vec3(0.8, 0.5, 0.2) * glow;
-
-  gl_FragColor = vec4(col, 1.0);
-}`
-
-function compileShader(gl, type, src) {
-  const s = gl.createShader(type)
-  gl.shaderSource(s, src)
-  gl.compileShader(s)
-  return s
-}
-
-function createProgram(gl, vs, fs) {
-  const prog = gl.createProgram()
-  gl.attachShader(prog, vs)
-  gl.attachShader(prog, fs)
-  gl.linkProgram(prog)
-  return prog
-}
-
-function initGL(canvas) {
-  const gl = canvas.getContext('webgl', { alpha: false })
-  if (!gl) return null
-
-  const vs = compileShader(gl, gl.VERTEX_SHADER, vertexSrc)
-  const fs = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSrc)
-  const prog = createProgram(gl, vs, fs)
-  gl.useProgram(prog)
-
-  const positions = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1])
-  const buf = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf)
-  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW)
-
-  const aLoc = gl.getAttribLocation(prog, 'aPosition')
-  gl.enableVertexAttribArray(aLoc)
-  gl.vertexAttribPointer(aLoc, 2, gl.FLOAT, false, 0, 0)
-
-  const uRes = gl.getUniformLocation(prog, 'uResolution')
-  const uTime = gl.getUniformLocation(prog, 'uTime')
-  const uIsLight = gl.getUniformLocation(prog, 'uIsLight')
-
-  return { gl, prog, uRes, uTime, uIsLight }
-}
-
-onMounted(() => {
-  const canvas = canvasRef.value
-  if (!canvas) return
-
-  const ctx = initGL(canvas)
-  if (!ctx) return
-
-  const { gl, uRes, uTime, uIsLight } = ctx
-
-  function resize() {
-    const dpr = window.devicePixelRatio || 1
-    const w = window.innerWidth
-    const h = window.innerHeight
-    canvas.width = w * dpr
-    canvas.height = h * dpr
-    canvas.style.width = w + 'px'
-    canvas.style.height = h + 'px'
-    gl.viewport(0, 0, canvas.width, canvas.height)
-    gl.uniform2f(uRes, canvas.width, canvas.height)
-  }
-
-  resize()
-  window.addEventListener('resize', resize)
-
-  let start = performance.now()
-
-  function frame() {
-    gl.uniform1f(uTime, (performance.now() - start) / 1000)
-    gl.uniform1f(uIsLight, theme.value === 'light' ? 1.0 : 0.0)
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
-    animId = requestAnimationFrame(frame)
-  }
-
-  animId = requestAnimationFrame(frame)
-
-  onBeforeUnmount(() => {
-    cancelAnimationFrame(animId)
-    window.removeEventListener('resize', resize)
-  })
-})
 </script>
 
 <template>
   <section class="hero" :class="theme">
-    <canvas ref="canvasRef" class="hero-canvas" />
     <div class="hero-overlay">
       <img :src="heroImage" alt="Jim Taylor" class="hero-portrait" />
       <h1 class="hero-title">Jim Taylor</h1>
@@ -182,14 +35,20 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding-bottom: 4rem;
+  transition: background 0.3s;
 }
 
-.hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
+.hero.dark {
+  background:
+    radial-gradient(60% 60% at 50% 0%, rgba(245, 158, 76, 0.08), transparent 70%),
+    radial-gradient(80% 80% at 50% 50%, #10101a 0%, #08080f 72%);
+}
+
+.hero.light {
+  background:
+    radial-gradient(60% 60% at 50% 0%, rgba(217, 119, 6, 0.06), transparent 70%),
+    radial-gradient(80% 80% at 50% 40%, #ffffff 0%, #f2f2f7 75%);
 }
 
 .hero-overlay {
@@ -336,7 +195,6 @@ onMounted(() => {
 
 .scroll-text {
   font-size: 0.7rem;
-  text-transform: uppercase;
   letter-spacing: 0.15em;
   transition: color 0.3s;
 }
