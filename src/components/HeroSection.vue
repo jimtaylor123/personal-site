@@ -11,7 +11,7 @@ const heroImage = computed(() =>
 <template>
   <section class="hero" :class="theme">
     <div class="hero-overlay">
-      <img :src="heroImage" alt="Jim Taylor" class="hero-portrait" />
+      <img :src="heroImage" alt="Jim Taylor" class="hero-portrait" fetchpriority="high" decoding="async" />
       <h1 class="hero-title">Jim Taylor</h1>
       <p class="hero-subtitle">Full Stack Developer / Cybersecurity</p>
       <div class="hero-cta">

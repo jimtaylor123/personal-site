@@ -121,6 +121,9 @@ function setFilter(cat) {
 }
 
 .filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: inherit;
   font-size: 0.75rem;
   font-weight: 500;

@@ -30,7 +30,7 @@ function openTel() {
 
 const social = [
   { label: 'GitHub', url: 'https://github.com/jimtaylor123' },
-  { label: 'LinkedIn', url: 'https://www.linkedin.com/in/jamesedwardtaylor/' },
+  // { label: 'LinkedIn', url: 'https://www.linkedin.com/in/jamesedwardtaylor/' },
 ]
 </script>
 
