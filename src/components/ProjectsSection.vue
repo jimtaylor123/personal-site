@@ -1,24 +1,25 @@
 <script setup>
+import { Keyboard, Salad, Egg } from 'lucide-vue-next'
+
 const projects = [
   {
     title: 'Possible Words',
     description: 'Generates and catalogues pronounceable words that aren\'t in the English dictionary yet. Users can suggest definitions and vote — like claiming uncharted linguistic territory.',
     url: 'https://possiblewords.jimtaylor.space',
-    emoji: '🔤',
-    status: 'Coming Soon',
+    icon: Keyboard,
   },
   {
     title: 'Slow Carb Randomizer',
     description: 'A mobile app that generates random food combinations following the slow carb diet popularised by Tim Ferriss. No thinking, just eating.',
     url: 'https://slowcarbrandomizer.jimtaylor.space',
-    emoji: '🥗',
+    icon: Salad,
     status: 'Coming Soon',
   },
   {
     title: 'REGGULAR',
     description: 'A SaaS app for running an egg delivery business — customer ordering, admin dashboards, route planning, and subscription management all in one place.',
     url: 'https://reggular.jimtaylor.space',
-    emoji: '🥚',
+    icon: Egg,
     status: 'Coming Soon',
   },
 ]
@@ -31,7 +32,7 @@ const projects = [
       <div class="project-grid">
         <article v-for="p in projects" :key="p.title" class="project-card">
           <h3 class="project-title">
-            <span aria-hidden="true">{{ p.emoji }}</span>
+            <span class="project-icon" aria-hidden="true"><component :is="p.icon" /></span>
             {{ p.title }}
             <span v-if="p.status" class="status-badge">{{ p.status }}</span>
           </h3>
@@ -110,6 +111,18 @@ const projects = [
   font-size: 1.1rem;
   margin-bottom: 0.4rem;
   color: var(--color-text);
+}
+
+.project-icon {
+  display: inline-block;
+  vertical-align: -0.15em;
+  margin-right: 0.5rem;
+  color: var(--color-accent);
+}
+
+.project-icon svg {
+  width: 1.1rem;
+  height: 1.1rem;
 }
 
 .project-desc {

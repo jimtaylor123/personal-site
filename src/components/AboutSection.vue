@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { Briefcase, BookOpen } from 'lucide-vue-next'
 
 const tech = [
   { label: 'PHP / Laravel', category: 'earning' },
@@ -41,7 +42,7 @@ function setFilter(cat) {
       <div class="about-content">
         <p class="about-text">
           Full stack developer focused on Laravel and Vue, with a deep
-          interest in cybersecurity. I build clean, secure applications
+          interest in cybersecurity and Agentic development. I build clean, secure applications
           and spend my free time studying system hardening, network
           security, and offensive-defense tooling.
         </p>
@@ -56,14 +57,14 @@ function setFilter(cat) {
           :class="{ active: filter === 'earning' }"
           @click="setFilter('earning')"
         >
-          <span aria-hidden="true">💼</span> Earning
+          <span aria-hidden="true"><Briefcase /></span> Earning
         </button>
         <button
           class="filter-btn learning"
           :class="{ active: filter === 'learning' }"
           @click="setFilter('learning')"
         >
-          <span aria-hidden="true">📖</span> Learning
+          <span aria-hidden="true"><BookOpen /></span> Learning
         </button>
       </div>
       <ul class="tech-list">
@@ -132,6 +133,11 @@ function setFilter(cat) {
   border: 1px solid var(--color-border);
   cursor: pointer;
   transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.filter-btn :deep(svg) {
+  width: 0.9rem;
+  height: 0.9rem;
 }
 
 .filter-btn.earning {

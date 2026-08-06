@@ -2,6 +2,7 @@
 import { ref, onMounted, watch, nextTick } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { Pencil, BookOpen, Footprints, Building2 } from 'lucide-vue-next'
 import SiteFooter from '../components/SiteFooter.vue'
 import { useTheme } from '../composables/useTheme'
 
@@ -126,28 +127,28 @@ watch(theme, () => {
         <h2 class="section-label">Hobbies</h2>
         <ul class="hobby-list">
           <li class="hobby-item">
-            <span class="hobby-emoji" aria-hidden="true">✏️</span>
+            <span class="hobby-emoji" aria-hidden="true"><Pencil /></span>
             <div>
               <span class="hobby-name">Cryptic Crosswords</span>
               <span class="hobby-desc">Guardian, Times &amp; Telegraph, usually with a coffee</span>
             </div>
           </li>
           <li class="hobby-item">
-            <span class="hobby-emoji" aria-hidden="true">📚</span>
+            <span class="hobby-emoji" aria-hidden="true"><BookOpen /></span>
             <div>
               <span class="hobby-name">Fiction</span>
               <span class="hobby-desc">Reading mostly — literary, sci-fi, and the odd thriller</span>
             </div>
           </li>
           <li class="hobby-item">
-            <span class="hobby-emoji" aria-hidden="true">🥾</span>
+            <span class="hobby-emoji" aria-hidden="true"><Footprints /></span>
             <div>
               <span class="hobby-name">Hill Walking</span>
               <span class="hobby-desc">The Lake District, the Dales, and Pendle Hill on a Sunday</span>
             </div>
           </li>
           <li class="hobby-item">
-            <span class="hobby-emoji" aria-hidden="true">🌆</span>
+            <span class="hobby-emoji" aria-hidden="true"><Building2 /></span>
             <div>
               <span class="hobby-name">Manchester</span>
               <span class="hobby-desc">Great music, great food, great vibe</span>
@@ -161,11 +162,15 @@ watch(theme, () => {
       <div class="section-inner">
         <h2 class="section-label">Church</h2>
         <p class="personal-text">
-          I'm a committed Christian — I believe Jesus is returning soon, and pray and read the bible daily. I am part of the congregation at Holden Chapel
-          <a href="https://www.holdenchapel.org.uk/" target="_blank" rel="noopener">find out more here</a>.
+          I'm a committed Christian — I believe Jesus is returning soon, and pray and read the bible daily. I am part of the congregation at 
+          <a href="https://www.holdenchapel.org.uk/" target="_blank" rel="noopener">Holden Chapel</a>.
           <br><br>
           I did a Theology degree at Oxford University to try and test and develop my faith. I remained convinced that the Bible is the word of God.
         </p>
+        <blockquote class="faith-quote">
+          "What does not kill me makes me stronger."
+          <cite>— Friedrich Nietzsche</cite>
+        </blockquote>
       </div>
     </section>
 
@@ -249,6 +254,24 @@ watch(theme, () => {
   text-decoration: underline;
 }
 
+.faith-quote {
+  margin: 1.25rem 0 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.faith-quote cite {
+  display: block;
+  margin-top: 0.25rem;
+  font-style: normal;
+  font-size: 0.8rem;
+  color: var(--color-accent);
+}
+
 .hobby-list {
   list-style: none;
   display: flex;
@@ -258,14 +281,18 @@ watch(theme, () => {
 
 .hobby-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.75rem;
 }
 
 .hobby-emoji {
-  font-size: 1.25rem;
+  color: var(--color-accent);
   flex-shrink: 0;
-  margin-top: 0.1rem;
+}
+
+.hobby-emoji svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .hobby-name {
