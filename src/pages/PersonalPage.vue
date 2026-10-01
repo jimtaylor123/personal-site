@@ -8,6 +8,26 @@ import { useTheme } from '../composables/useTheme'
 
 const { theme } = useTheme()
 
+const CARTO_API_KEY = import.meta.env.VITE_CARTO_API_KEY || ''
+
+const CARTO_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+
+const TILE_MAX_ZOOM = 19
+
+function cartoTileUrl(style) {
+  const url = `https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png`
+  return CARTO_API_KEY ? `${url}?key=${CARTO_API_KEY}` : url
+}
+
+function makeTileLayer(style) {
+  return L.tileLayer(cartoTileUrl(style), {
+    maxZoom: TILE_MAX_ZOOM,
+    subdomains: 'abcd',
+    attribution: CARTO_ATTRIBUTION,
+  })
+}
+
 const places = [
   { name: 'Busan, South Korea', coords: [35.1796, 129.0756] },
   { name: 'Florianópolis, Brazil', coords: [-27.5973, -48.5496] },
@@ -25,18 +45,13 @@ let markers = []
 
 function initMap() {
   const isDark = theme.value === 'dark'
-  const tileUrl = isDark
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+  const style = isDark ? 'dark_all' : 'light_all'
 
   if (map) {
     if (tileLayer) {
       map.removeLayer(tileLayer)
     }
-    tileLayer = L.tileLayer(tileUrl, {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-    }).addTo(map)
+    tileLayer = makeTileLayer(style).addTo(map)
 
     markers.forEach(m => {
       const icon = m.getIcon()
@@ -54,14 +69,10 @@ function initMap() {
   }
 
   map = L.map(mapContainer.value, {
-    attributionControl: false,
     scrollWheelZoom: false,
   }).setView([35, 20], 2)
 
-  tileLayer = L.tileLayer(tileUrl, {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  }).addTo(map)
+  tileLayer = makeTileLayer(style).addTo(map)
 
   const markerColor = isDark ? '#f59e4c' : '#d97706'
 
