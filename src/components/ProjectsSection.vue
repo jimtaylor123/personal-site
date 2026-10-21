@@ -13,7 +13,6 @@ const projects = [
     description: 'A mobile app that generates random food combinations following the slow carb diet popularised by Tim Ferriss. No thinking, just eating.',
     url: 'https://slowcarbrandomizer.jimtaylor.space',
     icon: Salad,
-    status: 'Coming Soon',
   },
   {
     title: 'REGGULAR',
@@ -30,20 +29,17 @@ const projects = [
     <div class="section-inner">
       <h2 class="section-label">Projects</h2>
       <div class="project-grid">
-        <article v-for="p in projects" :key="p.title" class="project-card">
+        <a v-for="p in projects" :key="p.title" :href="p.url" class="project-card" target="_blank" rel="noopener">
           <h3 class="project-title">
             <span class="project-icon" aria-hidden="true"><component :is="p.icon" /></span>
             {{ p.title }}
             <span v-if="p.status" class="status-badge">{{ p.status }}</span>
           </h3>
           <p class="project-desc">{{ p.description }}</p>
-          <span v-if="p.status" class="project-link project-link--disabled">
+          <span class="project-link">
             Visit <span aria-hidden="true">&rarr;</span>
           </span>
-          <a v-else :href="p.url" class="project-link" target="_blank" rel="noopener">
-            Visit <span aria-hidden="true">&rarr;</span>
-          </a>
-        </article>
+        </a>
       </div>
     </div>
   </section>
@@ -78,14 +74,18 @@ const projects = [
 }
 
 .project-card {
+  display: block;
   padding: 1.5rem;
   border-radius: 12px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  color: inherit;
+  text-decoration: none;
   transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
 }
 
-.project-card:hover {
+.project-card:hover,
+.project-card:focus-visible {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 1px var(--color-accent-glow);
 }
@@ -141,9 +141,4 @@ const projects = [
   gap: 0.3rem;
 }
 
-.project-link--disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  user-select: none;
-}
 </style>
