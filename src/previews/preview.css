@@ -28,3 +28,13 @@
 .workshop .about-extras a:last-child{background:#e7dcfa}
 .workshop .preview-header nav a[aria-current='page']{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px;color:var(--accent)}
 @media(max-width:800px){.workshop .preview-header{flex-wrap:wrap;gap:24px}.workshop .preview-header nav{width:100%;justify-content:space-between;gap:12px;flex-wrap:wrap}.about-extras{flex-wrap:wrap}.about-extras a{flex:1;min-width:160px}}
+
+/* A lighter, high-contrast contact action in the shared header. */
+.workshop .preview-header nav a:last-child {
+  background: #d4ed73;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+}
+.workshop .preview-header nav a:last-child:hover {
+  background: #e2f3a0;
+}
