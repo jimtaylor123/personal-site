@@ -1,107 +1,60 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('Home page', () => {
-  test('loads with correct title and heading', async ({ page }) => {
-    await page.goto('/')
-    await expect(page).toHaveTitle(/Jim Taylor/)
-    await expect(page.locator('h1')).toBeVisible()
-  })
-
-  test('nav links are visible', async ({ page }) => {
-    await page.goto('/')
-    const nav = page.locator('.nav')
-    await expect(nav.locator('a', { hasText: 'About' })).toBeVisible()
-    await expect(nav.locator('a', { hasText: 'Projects' })).toBeVisible()
-    await expect(nav.locator('a', { hasText: 'Links' })).toBeVisible()
-    await expect(nav.locator('a', { hasText: 'Uses' })).toBeVisible()
-    await expect(nav.locator('a', { hasText: 'Personal' })).toBeVisible()
-  })
-
-  test('theme toggle switches between dark and light', async ({ page }) => {
-    await page.goto('/')
-    const html = page.locator('html')
-    await expect(html).toHaveAttribute('data-theme', 'dark')
-    await page.locator('.theme-toggle').click()
-    await expect(html).toHaveAttribute('data-theme', 'light')
-    await page.locator('.theme-toggle').click()
-    await expect(html).toHaveAttribute('data-theme', 'dark')
-  })
-
-  test('about section has earning/learning filter buttons', async ({ page }) => {
-    await page.goto('/')
-    await expect(page.getByRole('button', { name: /Earning/ })).toBeVisible()
-    await expect(page.getByRole('button', { name: /Learning/ })).toBeVisible()
-  })
-
-  test('filtering tech list works', async ({ page }) => {
-    await page.goto('/')
-    const about = page.locator('#about')
-    const techItems = about.locator('.tech-item')
-
-    const allCount = await techItems.count()
-
-    await page.getByRole('button', { name: /Earning/ }).click()
-    const earningCount = await techItems.count()
-    expect(earningCount).toBeLessThan(allCount)
-
-    await page.getByRole('button', { name: /Learning/ }).click()
-    const learningCount = await techItems.count()
-    expect(learningCount).toBeLessThan(allCount)
-
-    await page.getByRole('button', { name: /Learning/ }).click()
-    expect(await techItems.count()).toBe(allCount)
-  })
+test('Workshop homepage introduces Jim and keeps REGGULAR unavailable', async ({ page }) => {
+  await page.goto('/')
+  await expect(page).toHaveTitle(/Jim Taylor/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Useful things.Unexpected ideas.')
+  await expect(page.locator('.preview-switcher')).toHaveCount(0)
+  await expect(page.locator('.hero-bottom')).toContainText('AI-assisted development')
+  await expect(page.locator('.eggs')).toContainText('Coming soon')
+  await expect(page.locator('.eggs a')).toHaveCount(0)
+  await expect(page.locator('.words a')).toHaveAttribute('href', 'https://possiblewords.jimtaylor.space')
 })
 
-test.describe('/uses page', () => {
-  test('loads and shows tool categories', async ({ page }) => {
-    await page.goto('/uses')
-    await expect(page.locator('.uses-title')).toHaveText('/uses')
-    const cats = page.locator('.cat')
-    expect(await cats.count()).toBeGreaterThanOrEqual(5)
-  })
-
-  test('nav persists on uses page', async ({ page }) => {
-    await page.goto('/uses')
-    await expect(page.locator('.nav')).toBeVisible()
-  })
+test('About uses a sharp, compact static portrait', async ({ page }) => {
+  await page.goto('/')
+  const image = page.locator('#about img')
+  await image.scrollIntoViewIfNeeded()
+  await image.evaluate(img => img.decode())
+  await expect(image).toHaveAttribute('src', '/images/jim-posterized.webp')
+  const dimensions = await image.evaluate(img => ({ width: img.clientWidth, height: img.clientHeight, naturalWidth: img.naturalWidth }))
+  expect(dimensions.naturalWidth).toBe(800)
+  expect(dimensions.height).toBeLessThan(dimensions.width)
 })
 
-test.describe('/personal page', () => {
-  test('loads with title and sections', async ({ page }) => {
-    await page.goto('/personal')
-    await expect(page.locator('.personal-title')).toHaveText('/personal')
-    await expect(page.locator('.hobby-list')).toBeVisible()
-    await expect(page.locator('.map-container')).toBeVisible()
-  })
-
-  test('map container renders', async ({ page }) => {
-    await page.goto('/personal')
-    const map = page.locator('.map-container')
-    await expect(map).toBeVisible()
-    await expect(map).toContainText('Click to explore')
-  })
-
-  test('places list is rendered', async ({ page }) => {
-    await page.goto('/personal')
-    const places = page.locator('.places-list-item')
-    expect(await places.count()).toBe(7)
-  })
+test('Main navigation connects supporting pages and home sections', async ({ page }) => {
+  await page.goto('/')
+  const nav = page.getByRole('navigation', { name: 'Main navigation' })
+  for (const label of ['Work', 'About', 'Uses', 'Personal', 'Contact']) {
+    await expect(nav.getByRole('link', { name: label, exact: label !== 'Contact' })).toBeVisible()
+  }
+  await nav.getByRole('link', { name: 'Uses', exact: true }).click()
+  await expect(page).toHaveURL('/uses')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Inside the toolbox.')
+  await expect(page.locator('.cat')).toHaveCount(7)
+  await expect(nav.getByRole('link', { name: 'Uses', exact: true })).toHaveAttribute('aria-current', 'page')
+  await nav.getByRole('link', { name: 'Personal', exact: true }).click()
+  await expect(page).toHaveURL('/personal')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Away from the keyboard.')
+  await expect(page.locator('.hobby-list')).toBeVisible()
+  await expect(page.locator('.places-list-item')).toHaveCount(7)
+  await expect(page.locator('.map-container')).toHaveClass(/leaflet-container/)
+  await nav.getByRole('link', { name: 'Work', exact: true }).click()
+  await expect(page).toHaveURL('/#work')
+  await expect(page.locator('#work')).toBeInViewport()
 })
 
-test.describe('Navigation', () => {
-  test('logo navigates to home', async ({ page }) => {
-    await page.goto('/uses')
-    await page.locator('.logo').click()
-    await expect(page).toHaveURL('/')
-  })
-
-  test('can navigate between subpages via nav', async ({ page }) => {
-    await page.goto('/')
-    const nav = page.locator('.nav')
-    await nav.locator('a', { hasText: 'Uses' }).click()
-    await expect(page).toHaveURL('/uses')
-    await nav.locator('a', { hasText: 'Personal' }).click()
-    await expect(page).toHaveURL('/personal')
-  })
+test('Mobile layout and supporting page links remain usable', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  for (const path of ['/', '/uses', '/personal']) {
+    await page.goto(path)
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await expect(page.getByRole('navigation').getByRole('link', { name: 'Personal', exact: true })).toBeVisible()
+  }
+  await page.goto('/')
+  await page.getByRole('link', { name: 'Outside the code' }).click()
+  await expect(page).toHaveURL('/personal')
+  await page.getByRole('link', { name: 'Jim Taylor home', exact: true }).click()
+  await expect(page).toHaveURL('/')
 })

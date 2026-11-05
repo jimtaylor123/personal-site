@@ -74,9 +74,8 @@ const categories = [
 <template>
   <main class="uses-page">
     <section class="uses-hero">
-      <h1 class="uses-title">/uses</h1>
-      <p class="uses-subtitle">The tools and gear I use daily.</p>
-      <p class="uses-quote">"Less, but better." — Dieter Rams</p>
+      <h1 class="uses-title">Inside the toolbox<span>.</span></h1>
+      <p class="uses-subtitle">The software, hardware and small comforts behind the things I build.</p>
     </section>
     <section class="uses-content section">
       <div class="section-inner">

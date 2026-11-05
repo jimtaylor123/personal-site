@@ -1,12 +1,11 @@
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Pencil, BookOpen, Footprints, Building2, Church } from 'lucide-vue-next'
 import SiteFooter from '../components/SiteFooter.vue'
-import { useTheme } from '../composables/useTheme'
 
-const { theme } = useTheme()
+const theme = ref('light')
 
 const CARTO_API_KEY = import.meta.env.VITE_CARTO_API_KEY || ''
 
@@ -55,7 +54,7 @@ function initMap() {
 
     markers.forEach(m => {
       const icon = m.getIcon()
-      const newColor = isDark ? '#f59e4c' : '#d97706'
+      const newColor = isDark ? '#6941cc' : '#6941cc'
       const newIcon = L.divIcon({
         className: 'custom-marker',
         html: `<svg width="24" height="24" viewBox="0 0 24 24" fill="${newColor}" stroke="white" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
@@ -74,7 +73,7 @@ function initMap() {
 
   tileLayer = makeTileLayer(style).addTo(map)
 
-  const markerColor = isDark ? '#f59e4c' : '#d97706'
+  const markerColor = isDark ? '#6941cc' : '#6941cc'
 
   const bounds = L.latLngBounds()
   places.forEach((p) => {
@@ -108,8 +107,9 @@ onMounted(() => {
   initMap()
 })
 
-watch(theme, () => {
-  nextTick(initMap)
+onBeforeUnmount(() => {
+  map?.remove()
+  map = null
 })
 
 </script>
@@ -117,7 +117,7 @@ watch(theme, () => {
 <template>
   <main class="personal-page">
     <section class="personal-hero">
-      <h1 class="personal-title">/personal</h1>
+      <h1 class="personal-title">Away from the keyboard.</h1>
       <p class="personal-subtitle">The bits between the commits.</p>
     </section>
 

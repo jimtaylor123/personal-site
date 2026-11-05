@@ -17,7 +17,7 @@ const projects = [
   {
     title: 'REGGULAR',
     description: 'A SaaS app for running an egg delivery business — customer ordering, admin dashboards, route planning, and subscription management all in one place.',
-    url: 'https://reggular.jimtaylor.space',
+    url: null,
     icon: Egg,
     status: 'Coming Soon',
   },
@@ -29,17 +29,17 @@ const projects = [
     <div class="section-inner">
       <h2 class="section-label">Projects</h2>
       <div class="project-grid">
-        <a v-for="p in projects" :key="p.title" :href="p.url" class="project-card" target="_blank" rel="noopener">
+        <component :is="p.url ? 'a' : 'div'" v-for="p in projects" :key="p.title" :href="p.url || undefined" class="project-card" :target="p.url ? '_blank' : undefined" :rel="p.url ? 'noopener' : undefined">
           <h3 class="project-title">
             <span class="project-icon" aria-hidden="true"><component :is="p.icon" /></span>
             {{ p.title }}
             <span v-if="p.status" class="status-badge">{{ p.status }}</span>
           </h3>
           <p class="project-desc">{{ p.description }}</p>
-          <span class="project-link">
+          <span v-if="p.url" class="project-link">
             Visit <span aria-hidden="true">&rarr;</span>
           </span>
-        </a>
+        </component>
       </div>
     </div>
   </section>

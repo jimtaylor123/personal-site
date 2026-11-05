@@ -1,88 +1,30 @@
+# jimtaylor.space
 
-```
-  ╔══════════════════════════════════════╗
-  ║     jimtaylor.space                  ║
-  ║     ———————————————                  ║
-  ║     personal site · portfolio · lab  ║
-  ╚══════════════════════════════════════╝
-```
+Jim Taylor’s personal workshop: full stack development, useful things and unexpected ideas. Built with Vue 3, Vue Router, Vite and hand-written CSS.
 
-## What
+## Run locally
 
-This is [jimtaylor.space](https://jimtaylor.space) — my little corner of the internet. It's a dark-first, single-page portfolio that introduces who I am, links to projects I've shipped, and shares the tools I use.
-
-Built because a personal site should feel like you, not a template.
-
-## Stack
-
-| Thing | What |
-|---|---|
-| **Vite 6** | Fast dev, fast builds |
-| **Vue 3** | Components, router, reactivity |
-| **Hand-written CSS** | Custom properties, no framework — more impressive in review |
-| **Space Grotesk + Inter** | Headings + body, via Google Fonts |
-| **Netlify** | Deploys from `main`, custom domain, security headers |
-
-## Pages
-
-- **/** — Hero with WebGL shader, portrait (smiling / not-smiling depending on theme), about, projects, links
-- **/uses** — Editor, frontend/backend tools, security gear, hardware
-
-## Running it
-
-```bash
+```sh
 npm install
-npm run dev      # local dev at localhost:5173
-npm run build    # production build into dist/
-npm run preview  # preview the production build
+npm run dev
+npm run build
+npm test
 ```
 
-## Design choices that mattered
+## Pages and design
 
-- **Dark-first** — the hero stays dramatic in both themes (WebGL canvas adjusts warmth)
-- **Nav is always dark-translucent** — works over the hero without `backdrop-filter` (which chokes on macOS Chrome)
-- **Anti-scrape contact** — email and phone are reversed in JS, decoded on click. Email copies to clipboard instead of `mailto:` (unreliable without a local mail client)
-- **Two portrait variants** — smiling in light mode, not-so-much in dark mode (because mood)
+- `/` — Workshop homepage with selected work, About and contact actions.
+- `/uses` — Tools and gear, styled to match Workshop.
+- `/personal` — Life outside development, hobbies and an interactive map.
+- `/preview/editorial`, `/preview/studio`, `/preview/workshop` — comparison studies.
+- `/preview/original` — previous homepage retained for reference.
 
-## Structure
+The homepage presents Jim as a full stack builder using Laravel, Vue and AI-assisted development. Purple and citrus accents, outlined panels and playful typography define the Workshop direction. One static, posterized WebP portrait lives in About, with a compact responsive crop. Project artwork is labelled as interface studies. REGGULAR is coming soon and has no outbound link.
 
-```
-public/
-  favicon.svg
-  images/
-    smiling.webp
-    not-smiling.webp
-src/
-  main.js
-  App.vue
-  style.css              # reset + custom properties
-  router.js
-  composables/
-    useTheme.js          # dark/light toggle, persisted
-  pages/
-    HomePage.vue
-    UsesPage.vue
-  components/
-    SiteHeader.vue       # fixed nav + theme toggle
-    SiteFooter.vue
-    HeroSection.vue      # WebGL shader canvas + portrait
-    AboutSection.vue
-    ProjectsSection.vue
-    LinksSection.vue
-```
+`src/previews/DesignPreview.vue` contains the homepage and comparison layouts; `src/previews/preview.css` defines their design. `WorkshopHeader.vue` provides shared navigation and `src/workshop.css` styles the supporting pages. Existing clipboard email and telephone actions are retained.
 
-## Deploy
+## Validation and deployment
 
-Pushing to `main` auto-deploys via Netlify. The `netlify.toml` locks down CSP, HSTS, and other security headers.
+`npm test` builds on a production preview server and checks the homepage, portrait, REGGULAR status, navigation and mobile layouts. Run `npm run build` first.
 
-## Colophon
-
-- Domain: [jimtaylor.space](https://jimtaylor.space)
-- Subdomain projects: `*.jimtaylor.space`
-- Email: decode it on the site (or you already know it)
-- CI: Netlify from `main`
-
----
-
-*Built with `npm create vite@latest`, a lot of hand-rolled CSS, and exactly zero
-page builders.*
+Pushing to `main` triggers the existing Netlify deployment to [jimtaylor.space](https://jimtaylor.space). `netlify.toml` sets the static output, SPA fallback and security headers.
